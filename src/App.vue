@@ -2,27 +2,23 @@
   <div class="my-app">
     <h1>Witaj w systemie do zapisów na zajęcia</h1>
 
-    <div v-if = "loggedIn">
+    <div v-if = "email">
       Zalogowany na {{email}}
       <a @click="logMeOut()">Wyloguj</a>
     </div>
-    <div v-else-if>
-      <br>
-      <label> Zaloguj się emailem: </label>
-      <input type="email" v-model="email">
-      <button @click="logMeIn()">Zaloguj się</button>
-      <div v-if="!email.includes('@')"> To nie jest email!</div>
-      <div v-else-if="email.length < 10"> Adres jest za krótki, bo ma {{email.length}} znaki.</div>
-      <div v-else-if="email.length < 15">Twój adres e-mail jest w sam raz.</div>
-      <div v-else>Twój adres e-mail jest stanowczo za długi, bo ma {{email.length}} znaków.</div>
+    <div v-else>
+      <LoginForm @login="(username) => logMeIn(username)" :button-label="Math.random() < 0.5 ? 'Zaloguj mnie' : 'Etykieta B'"></LoginForm>
     </div>
   </div>
 </template>
 
 <script>
 import "milligram";
+import LoginForm from "./LoginForm";
+import UserState from "./UserState";
 
 export default {
+  components: {LoginForm},
   data() {
     return {
       email: '',
@@ -34,11 +30,13 @@ export default {
     alertMyEmail() {
       alert(this.email);
     },
-    logMeIn(){
-      this.loggedIn = true;
+    logMeIn(username){
+      this.email = username;
+      //this.loggedIn = true;
     },
     logMeOut(){
-      this.loggedIn = false;
+      this.email = '';
+      //this.loggedIn = false;
     }
   }
 }
